@@ -1,0 +1,452 @@
+PARTS DATABASE
+
+mysql> CREATE TABLE PARTS(PNO VARCHAR(5) PRIMARY KEY,PNAME 
+
+VARCHAR(20),PRICE DECIMAL(5,2));
+
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc PARTS;
+
++-------+--------------+------+-----+---------+-------+
+
+| Field | Type | Null | Key | Default | Extra |
+
++-------+--------------+------+-----+---------+-------+
+
+| PNO | varchar(5) | NO | PRI | NULL | |
+
+| PNAME | varchar(20) | YES | | NULL | |
+
+| PRICE | decimal(5,2) | YES | | NULL | |
+
++-------+--------------+------+-----+---------+-------+
+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE ZIP_CODES(
+
+ -> ZIP INT PRIMARY KEY,
+
+ -> CITY VARCHAR(20)
+
+ -> );
+
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc ZIP_CODES;
+
++-------+-------------+------+-----+---------+-------+
+
+| Field | Type | Null | Key | Default | Extra |
+
++-------+-------------+------+-----+---------+-------+
+
+| ZIP | int | NO | PRI | NULL | |
+
+| CITY | varchar(20) | YES | | NULL | |
+
++-------+-------------+------+-----+---------+-------+
+
+2 rows in set (0.01 sec)
+
+mysql> CREATE TABLE CUSTOMERS( CNO VARCHAR(5) PRIMARY KEY, CNAME 
+
+VARCHAR(15), ZIP INT, FOREIGN KEY (ZIP) REFERENCES ZIP_CODES(ZIP) ON 
+
+DELETE CASCADE );
+
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> DESC CUSTOMERS;
+
++-------+-------------+------+-----+---------+-------+
+
+| Field | Type | Null | Key | Default | Extra |
+
++-------+-------------+------+-----+---------+-------+
+
+| CNO | varchar(5) | NO | PRI | NULL | |
+
+| CNAME | varchar(15) | YES | | NULL | |
+
+| ZIP | int | YES | MUL | NULL | |
+
++-------+-------------+------+-----+---------+-------+
+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE EMPLOYEE(
+
+ -> ENO VARCHAR(5) PRIMARY KEY,
+
+ -> ENAME VARCHAR(15),
+
+ -> ZIP INT,
+
+ -> FOREIGN KEY (ZIP) REFERENCES ZIP_CODES(ZIP) ON DELETE CASCADE
+
+ -> );
+ Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE TABLE ORDERS(
+
+ -> ONO VARCHAR(5) PRIMARY KEY,
+
+ -> CNO VARCHAR(5),
+
+ -> ENO VARCHAR(5),
+
+ -> FOREIGN KEY (CNO) REFERENCES CUSTOMERS(CNO) ON DELETE CASCADE,
+
+ -> FOREIGN KEY (ENO) REFERENCES EMPLOYEE(ENO) ON DELETE CASCADE
+
+ -> );
+
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> CREATE TABLE ODETAILS(
+
+ -> ONO VARCHAR(5) ,
+
+ -> PNO VARCHAR(5),
+
+ -> QTY INT,
+
+ -> FOREIGN KEY (ONO) REFERENCES ORDERS(ONO) ON DELETE CASCADE,
+
+ -> FOREIGN KEY (PNO) REFERENCES PARTS(PNO) ON DELETE CASCADE
+
+ -> );
+
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> INSERT INTO PARTS VALUES("P1","gear",25.50);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PARTS VALUES("P2","keys",15.50);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PARTS VALUES("P3","shaft",19.50);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PARTS VALUES("P4","cam",19.00);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO PARTS VALUES("P5","spring",12.00);
+
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select *from PARTS;
+
++-----+--------+-------+
+
+| PNO | PNAME | PRICE |
+
++-----+--------+-------+
+
+| P1 | gear | 25.50 |
+
+| P2 | keys | 15.50 |
+
+| P3 | shaft | 19.50 |
+
+| P4 | cam | 19.00 |
+
+| P5 | spring | 12.00 |
+
++-----+--------+-------+
+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO ZIP_CODES VALUES(12,"Puttur");
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ZIP_CODES VALUES(13,"Mangaluru");
+
+Query OK, 1 row affected (0.01 sec)
+mysql> INSERT INTO ZIP_CODES VALUES(11,"Vittal");
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ZIP_CODES VALUES(14,"kabaka");
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ZIP_CODES VALUES(15,"Mysore");
+
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select *from ZIP_CODES;
+
++-----+-----------+
+
+| ZIP | CITY |
+
++-----+-----------+
+
+| 11 | Vittal |
+
+| 12 | Puttur |
+
+| 13 | Mangaluru |
+
+| 14 | kabaka |
+
+| 15 | Mysore |
+
++-----+-----------+
+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO CUSTOMERS VALUES("C1","Sam",11);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CUSTOMERS VALUES("C2","Sameer",11);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CUSTOMERS VALUES("C3","Samar",12);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CUSTOMERS VALUES("C4","hari",12);
+
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO CUSTOMERS VALUES("C5","harry",13);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CUSTOMERS VALUES("C6","Mary",14);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CUSTOMERS VALUES("C7","furry",15);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select *from CUSTOMERS;
+
++-----+--------+------+
+
+| CNO | CNAME | ZIP |
+
++-----+--------+------+
+
+| C1 | Sam | 11 |
+
+| C2 | Sameer | 11 |
+
+| C3 | Samar | 12 |
+
+| C4 | hari | 12 |
+
+| C5 | harry | 13 |
+ C6 | Mary | 14 |
+
+| C7 | furry | 15 |
+
++-----+--------+------+
+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO EMPLOYEE VALUES("E1,"EMP1",11);
+
+ "> INSERT INTO EMPLOYEE VALUES("E1","EMP1",11);
+
+ "> ;
+
+ "> ";
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to 
+
+your MySQL server version for the right syntax to use near 'EMP1",11);
+
+INSERT INTO EMPLOYEE VALUES("E1","EMP1",11);
+
+;
+
+"' at line 1
+
+mysql> INSERT INTO EMPLOYEE VALUES("E1","EMP1",11);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO EMPLOYEE VALUES("E2","EMP2",12);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO EMPLOYEE VALUES("E3","EMP3",13);
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select *from EMPLOYEE;
+
++-----+-------+------+
+
+| ENO | ENAME | ZIP |
+
++-----+-------+------+
+
+| E1 | EMP1 | 11 |
+
+| E2 | EMP2 | 12 |
+
+| E3 | EMP3 | 13 |
+
++-----+-------+------+
+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO ORDERS VALUES("O1","C1","E1"););
+
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SELECT *FROM ORDERS;
+
++-----+------+------+
+
+| ONO | CNO | ENO |
+
++-----+------+------+
+
+| O1 | C1 | E1 |
+
++-----+------+------+
+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO ORDERS VALUES("O2","C1","E2");
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ORDERS VALUES("O3","C2","E2");
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ORDERS VALUES("O4","C5","E3");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT *FROM ORDERS;
+
++-----+------+------+
+
+| ONO | CNO | ENO |
+
++-----+------+------+
+
+| O1 | C1 | E1 |
+
+| O2 | C1 | E2 |
+
+| O3 | C2 | E2 |
+
+| O4 | C5 | E3 |
+
++-----+------+------+
+
+4 rows in set (0.00 sec)
+
+mysql> INSERT INTO ODETAILS VALUES("O1","P1","2");
+
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO ODETAILS VALUES("O2","P2","1");
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ODETAILS VALUES("O3","P3","1");
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO ODETAILS VALUES("O4","P4","1");
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT *FROM ODETAILS;
+
++------+------+------+
+
+| ONO | PNO | QTY |
+
++------+------+------+
+
+| O1 | P1 | 2 |
+
+| O2 | P2 | 1 |
+
+| O3 | P3 | 1 |
+
+| O4 | P4 | 1 |
+
++------+------+------+
+
+4 rows in set (0.01 sec)
+
+mysql> SELECT PNAME
+
+ -> FROM PARTS
+
+ -> WHERE PRICE<19.50;
+
++--------+
+
+| PNAME |
+
++--------+
+
+| keys |
+
+| cam |
+
+| spring |
+
++--------+
+
+3 rows in set (0.00 sec)
+
+mysql> SELECT Z.CITY,E.ENAME
+
+ -> FROM ZIP_CODES Z,EMPLOYEE E,ORDERS O,PARTS P,ODETAILS OD
+
+ -> WHERE Z.ZIP=E.ZIP AND E.ENO=O.ENO AND O.ONO=OD.ONO AND OD.PNO=P.PNO 
+
+AND P.PRICE>19;
++--------+-------+
+
+| CITY | ENAME |
+
++--------+-------+
+
+| Vittal | EMP1 |
+
+| Puttur | EMP2 |
+
++--------+-------+
+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Z.CITY,E.ENAME FROM ZIP_CODES Z,EMPLOYEE E,ORDERS O,PARTS 
+
+P,ODETAILS OD WHERE Z.ZIP=E.ZIP AND E.ENO=O.ENO AND O.ONO=OD.ONO AND 
+
+OD.PNO=P.PNO AND P.PRICE>25;
+
++--------+-------+
+
+| CITY | ENAME |
+
++--------+-------+
+
+| Vittal | EMP1 |
+
++--------+-------+
+
+1 row in set (0.00 sec)
